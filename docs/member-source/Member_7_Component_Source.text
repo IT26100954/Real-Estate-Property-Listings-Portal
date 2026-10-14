@@ -1,0 +1,71 @@
+===== backend/src/main/java/com/realestate/model/Admin.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public abstract class Admin extends User {
+  protected Admin(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getAdminLevel() {
+    return get("adminLevel");
+  }
+
+  public abstract String getPermissions();
+}
+
+
+===== backend/src/main/java/com/realestate/model/SuperAdmin.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class SuperAdmin extends Admin {
+  public SuperAdmin(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getPermissions() {
+    return "All modules and administrator management";
+  }
+
+  public String summary() {
+    return getPermissions();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/model/ContentAdmin.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class ContentAdmin extends Admin {
+  public ContentAdmin(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getPermissions() {
+    return "Manage property listings and moderate reviews";
+  }
+
+  public String summary() {
+    return getPermissions();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/dao/AdminDAO.java =====
+package com.realestate.dao;
+import com.realestate.model.Admin;
+public final class AdminDAO extends SqlDAO<Admin> {
+  public AdminDAO() { super("admins"); }
+}
+
+
+===== frontend/src/pages/AdminsPage.jsx =====
+import React from 'react';
+import ModulePage from '../components/ModulePage.jsx';
+// Owned by the admins member. Shared form changes require the UI lead's review.
+export default function AdminsPage(props) { return <ModulePage key="admins" module="admins" {...props}/>; }
