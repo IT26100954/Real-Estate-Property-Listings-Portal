@@ -1,0 +1,95 @@
+===== backend/src/main/java/com/realestate/model/Offer.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public abstract class Offer extends Entity {
+  protected Offer(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getPropertyId() {
+    return get("propertyId");
+  }
+
+  public String getBuyerId() {
+    return get("buyerId");
+  }
+
+  public String getOfferType() {
+    return get("offerType");
+  }
+
+  public String getOfferAmount() {
+    return get("offerAmount");
+  }
+
+  public String getDurationMonths() {
+    return get("durationMonths");
+  }
+
+  public String getOfferDate() {
+    return get("offerDate");
+  }
+
+  public String getStatus() {
+    return get("status");
+  }
+
+  public abstract double calculateTotalPayable();
+}
+
+
+===== backend/src/main/java/com/realestate/model/PurchaseOffer.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class PurchaseOffer extends Offer {
+  public PurchaseOffer(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public double calculateTotalPayable() {
+    return number("offerAmount");
+  }
+
+  public String summary() {
+    return "Purchase total LKR " + calculateTotalPayable();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/model/RentalOffer.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class RentalOffer extends Offer {
+  public RentalOffer(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public double calculateTotalPayable() {
+    return number("offerAmount") * number("durationMonths");
+  }
+
+  public String summary() {
+    return "Rental contract total LKR " + calculateTotalPayable();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/dao/OfferDAO.java =====
+package com.realestate.dao;
+import com.realestate.model.Offer;
+public final class OfferDAO extends SqlDAO<Offer> {
+  public OfferDAO() { super("offers"); }
+}
+
+
+===== frontend/src/pages/OffersPage.jsx =====
+import React from 'react';
+import ModulePage from '../components/ModulePage.jsx';
+// Owned by the offers member. Shared form changes require the UI lead's review.
+export default function OffersPage(props) { return <ModulePage key="offers" module="offers" {...props}/>; }

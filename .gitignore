@@ -31,3 +31,18 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# SQL / React project
+**/node_modules/
+**/target/
+**/.idea/
+*.iml
+frontend/dist/
+backend/src/main/resources/static/
+.env
+.env.*
+!.env.example
+*.log
+private-data/
+database/imported_private_data.sql
+database/backups/

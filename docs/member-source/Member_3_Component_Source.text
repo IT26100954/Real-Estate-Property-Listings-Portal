@@ -1,0 +1,99 @@
+===== backend/src/main/java/com/realestate/model/Agent.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public abstract class Agent extends Entity {
+  protected Agent(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getFullName() {
+    return get("fullName");
+  }
+
+  public String getEmail() {
+    return get("email");
+  }
+
+  public String getPhone() {
+    return get("phone");
+  }
+
+  public String getLicenseNo() {
+    return get("licenseNo");
+  }
+
+  public String getCity() {
+    return get("city");
+  }
+
+  public String getExperienceYears() {
+    return get("experienceYears");
+  }
+
+  public String getAgentType() {
+    return get("agentType");
+  }
+
+  public String getCommissionRate() {
+    return get("commissionRate");
+  }
+
+  public abstract double calculateCommission(double price);
+}
+
+
+===== backend/src/main/java/com/realestate/model/FullTimeAgent.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class FullTimeAgent extends Agent {
+  public FullTimeAgent(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public double calculateCommission(double price) {
+    return price * number("commissionRate") / 100 + 10000;
+  }
+
+  public String summary() {
+    return "Full time • Commission " + getCommissionRate() + "% + LKR 10,000 bonus";
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/model/PartTimeAgent.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class PartTimeAgent extends Agent {
+  public PartTimeAgent(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public double calculateCommission(double price) {
+    return price * number("commissionRate") / 100;
+  }
+
+  public String summary() {
+    return "Part time • Commission " + getCommissionRate() + "%";
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/dao/AgentDAO.java =====
+package com.realestate.dao;
+import com.realestate.model.Agent;
+public final class AgentDAO extends SqlDAO<Agent> {
+  public AgentDAO() { super("agents"); }
+}
+
+
+===== frontend/src/pages/AgentsPage.jsx =====
+import React from 'react';
+import ModulePage from '../components/ModulePage.jsx';
+// Owned by the agents member. Shared form changes require the UI lead's review.
+export default function AgentsPage(props) { return <ModulePage key="agents" module="agents" {...props}/>; }

@@ -1,0 +1,107 @@
+===== backend/src/main/java/com/realestate/model/User.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public abstract class User extends Entity {
+  protected User(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getUsername() {
+    return get("username");
+  }
+
+  public String getPassword() {
+    return get("password");
+  }
+
+  public String getEmail() {
+    return get("email");
+  }
+
+  public String getPhone() {
+    return get("phone");
+  }
+
+  public String getUserType() {
+    return get("userType");
+  }
+
+  public abstract String getPermissions();
+}
+
+
+===== backend/src/main/java/com/realestate/model/BuyerUser.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class BuyerUser extends User {
+  public BuyerUser(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getPermissions() {
+    return "Browse, book viewings, make offers and review";
+  }
+
+  public String summary() {
+    return getPermissions();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/model/SellerUser.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class SellerUser extends User {
+  public SellerUser(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getPermissions() {
+    return "Manage own properties and review offers";
+  }
+
+  public String summary() {
+    return getPermissions();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/model/AgentUser.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class AgentUser extends User {
+  public AgentUser(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getPermissions() {
+    return "Manage assigned listings and viewing appointments";
+  }
+
+  public String summary() {
+    return getPermissions();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/dao/UserDAO.java =====
+package com.realestate.dao;
+import com.realestate.model.User;
+public final class UserDAO extends SqlDAO<User> {
+  public UserDAO() { super("users"); }
+}
+
+
+===== frontend/src/pages/UsersPage.jsx =====
+import React from 'react';
+import ModulePage from '../components/ModulePage.jsx';
+// Owned by the users member. Shared form changes require the UI lead's review.
+export default function UsersPage(props) { return <ModulePage key="users" module="users" {...props}/>; }

@@ -1,0 +1,91 @@
+===== backend/src/main/java/com/realestate/model/Review.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public abstract class Review extends Entity {
+  protected Review(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String getReviewerId() {
+    return get("reviewerId");
+  }
+
+  public String getTargetId() {
+    return get("targetId");
+  }
+
+  public String getReviewType() {
+    return get("reviewType");
+  }
+
+  public String getRating() {
+    return get("rating");
+  }
+
+  public String getComment() {
+    return get("comment");
+  }
+
+  public String getReviewDate() {
+    return get("reviewDate");
+  }
+
+  public abstract String displayReview();
+}
+
+
+===== backend/src/main/java/com/realestate/model/PropertyReview.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class PropertyReview extends Review {
+  public PropertyReview(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String displayReview() {
+    return "Property " + getTargetId() + ": " + getRating() + "/5 — " + getComment();
+  }
+
+  public String summary() {
+    return displayReview();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/model/AgentReview.java =====
+package com.realestate.model;
+
+import java.util.Map;
+
+public final class AgentReview extends Review {
+  public AgentReview(String id, Map<String, String> fields) {
+    super(id, fields);
+  }
+
+  public String displayReview() {
+    return "Agent " + getTargetId() + ": " + getRating() + "/5 — " + getComment();
+  }
+
+  public String summary() {
+    return displayReview();
+  }
+}
+
+
+===== backend/src/main/java/com/realestate/dao/ReviewDAO.java =====
+package com.realestate.dao;
+import com.realestate.model.Review;
+public final class ReviewDAO extends SqlDAO<Review> {
+  public ReviewDAO() { super("reviews"); }
+}
+
+
+===== frontend/src/pages/ReviewsPage.jsx =====
+import React from 'react';
+import ModulePage from '../components/ModulePage.jsx';
+// Owned by the reviews member. Shared form changes require the UI lead's review.
+export default function ReviewsPage(props) { return <ModulePage key="reviews" module="reviews" {...props}/>; }
